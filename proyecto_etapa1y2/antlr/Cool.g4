@@ -1,3 +1,7 @@
+/* Omar Robledo Rodríguez - A01338010
+Aldo Fernando Ortiz Mejía - A01654725
+Diego Ramírez Levy - A01367771 */
+
 grammar Cool;
 
 program

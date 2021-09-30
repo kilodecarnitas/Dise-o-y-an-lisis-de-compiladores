@@ -1,4 +1,4 @@
-# Generated from c:\Users\aorti\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\Neunte teil\Diseño de compiladores\DC - Repositorio del profesor\proyecto_etapa1y2\antlr\Cool.g4 by ANTLR 4.9.2
+# Generated from c:\Users\aorti\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\Neunte teil\Diseño de compiladores\DC - Prácticas\proyecto_etapa1y2\antlr\Cool.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .CoolParser import CoolParser
