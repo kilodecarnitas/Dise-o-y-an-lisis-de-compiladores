@@ -1,1 +1,0 @@
-carro <= dame_un Carro tomando {llanta:10, Puerta:12, Radio:dame_un Radio tomando {marca:Sony}} ya!

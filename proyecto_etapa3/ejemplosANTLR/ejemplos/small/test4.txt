@@ -1,2 +1,0 @@
-bool x;
-x = ! false;

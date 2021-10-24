@@ -1,4 +1,0 @@
-hola :- cuando << 234 >> 4534 si_no 3242
-hola :- cuando << a :- 234 >> 4534 si_no cuando << hey >> 0 si_no 1
-111
-a :- 543

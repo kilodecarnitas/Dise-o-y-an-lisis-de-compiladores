@@ -1,2 +1,0 @@
-#name resources/scanner/input/s05.test.cool
-#1 StrConst "other unescaped whitespace: \t\f\022\013"
