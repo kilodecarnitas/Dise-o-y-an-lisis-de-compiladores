@@ -2,7 +2,7 @@
 #Omar Robledo Rodríguez - A01338010
 #Aldo Fernando Ortiz Mejía -  A01654725
 
-from antlr4 import FileStream, ParseTreeWalker, CommonTokenStream
+from antlr4 import *
 from antlr.CoolLexer import CoolLexer
 from antlr.CoolParser import CoolParser
 
