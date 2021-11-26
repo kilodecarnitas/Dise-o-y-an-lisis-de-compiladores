@@ -4,12 +4,15 @@ from antlr.CoolParser import *
 from antlr.CoolListener import *
 
 import sys
+import math
 from string import Template
 import asm
+from data import DataListener
+from structure import _allStrings, _allInts, _allClasses
+from structure import *
 
-import math
 
-from listener import Listener1
+basicTags = dict(intTag=2, boolTag=3, stringTag=4)
 
 class Output:
     def __init__(self):
@@ -63,13 +66,28 @@ def constants(o):
             - tamanio del objeto: [tag, tamanio, ptr al dispTab y contenido] = 4 words
             - valor
     """
+    for i in range(len(_allStrings)-1, -1, -1,):
+        # Obtener tamaño del string
+        strLen = len(_allStrings[i].replace("\\",""))
 
-    ### POR EJEMPLO (CAMBIAR)
-    o.accum += asm.cTplStr.substitute(idx=3, tag=2, size=23, sizeIdx=2, value='hola mundo')
-    o.accum += asm.cTplInt.substitute(idx=5, tag=12, value=340)
+        # Obtener el tamaño del objeto 
+        size = int(4+math.ceil((strLen+1)/4))
+        
+        # Guardar el tamaño del string dentro de las constantes Integer si no existe 
+        if not strLen in _allInts:
+            _allInts.append(strLen)
+            index = len(_allInts)-1
+        else:
+            index = _allInts.index(strLen)
 
-    # Siempre incluir los bool
-    o.accum += asm.boolStr
+        o.accum += asm.cTplStr.substitute(idx=i, tag=basicTags['stringTag'], size=size, sizeIdx=index, value=_allStrings[i])
+
+    # Integers
+    for i in range(len(_allInts)-1, -1, -1,):
+        o.accum += asm.cTplInt.substitute(idx=i, tag=basicTags['intTag'], value=_allInts[i])
+
+    # Booleans
+    o.accum += asm.boolStr.substitute(tag=basicTags['boolTag'])
 
 def tables(o):
     """
@@ -81,19 +99,43 @@ def tables(o):
     3. dispTab para cada clase
         3.1 Listado de los métodos en cada clase considerando herencia
 """
-    #Ejemplo (REEMPLAZAR):
+    classStart = _allStrings.index('Object') # TODO: Check if Object is always the first object
 
+    # Class Name Table
     o.p('class_nameTab')
-    o.p('.word', 'str_const3')
+    for i in range(classStart, len(_allStrings)-1):
+        o.p('.word', 'str_const{}'.format(i))
 
+    # Class Object Table
     o.p('class_objTab')
-    o.p('.word', 'Object_protObj')
-    o.p('.word', 'Object_init') 
+    for klass in _allClasses:
+        o.p('.word', '{}_protObj'.format(klass))
+        o.p('.word', '{}_init'.format(klass)) 
 
-    o.p('Object_dispTab')
-    o.p('.word', 'Object.abort')
-    o.p('.word', 'Object.type_name')
-    o.p('.word', 'Object.copy')
+    # Object Dispatch Table
+    for klass in _allClasses.values():
+        o.p('{}_dispTab'.format(klass.name))
+
+        curr = klass.name
+        methods = []
+        currMethods = []
+
+        # Obtener todos los metodos de esta clase
+        for method in klass.methods:
+            currMethods = ["{}.{}".format(curr, method)] + currMethods
+        methods.extend(currMethods)
+        
+        # Obtener todos los metodos de las clases que hereda
+        while curr != "Object":
+            curr = _allClasses[curr].inherits
+            currMethods = []
+            for method in _allClasses[curr].methods:
+                currMethods = ["{}.{}".format(curr, method)] + currMethods
+            methods.extend(currMethods)
+        
+        # Agregar métodos
+        for i in range(len(methods)-1, -1, -1):
+            o.p('.word', methods[i])
     
 def templates(o):
     """
@@ -108,24 +150,28 @@ def templates(o):
         - dispTab
         - atributos
 """
-    # Ejemplo: nombre=Object, tag->0, tamanio=3, atributos=no tiene
-    o.accum += """
-    .word   -1 
-Object_protObj:
-    .word   0 
-    .word   3 
-    .word   Object_dispTab 
-"""
-    # Ejemplo: nombre=String, tag->4, tamanio=5, atributos=int ptr, 0
-    o.accum += """
-    .word   -1 
-String_protObj:
-    .word   4 
-    .word   5 
-    .word   String_dispTab 
-    .word   int_const0 
-    .word   0 
-"""
+    i = 0
+    for klass in _allClasses.values():
+        o.p(".word", "-1")
+        o.p("{}.protObj".format(klass.name))
+        o.p(".word", i) # TODO: Check if tag is incremental
+        
+        size = 3 + len(klass.attributes) 
+        o.p(".word", size)
+
+        o.p(".word", "{}_dispTab".format(klass.name))
+
+        if size>3:
+            # TODO: Check how these values are generated
+            for attrType in klass.attributes.values():
+                if attrType == "String":
+                    o.p(".word", "str_const{}".format(len(_allStrings)-1))
+                elif attrType == "Int":
+                    o.p(".word", "int_const0")
+                else:
+                    o.p(".word", "0")
+
+        i += 1
 
 def heap(o):
     o.accum += asm.heapStr
@@ -158,7 +204,11 @@ if __name__ == '__main__':
 
     # Poner aquí los listeners necesarios para recorrer el árbol y obtener los datos
     # que requiere el generador de código
-    walker.walk(Listener1(), tree)
+    setBaseClasses()
+    walker.walk(DataListener(), tree)
+    # for klass in _allClasses:
+        # print(_allClasses[klass].name, _allClasses[klass].inherits)
+    
     #walker.walk(Listener2(), tree)
 
     # Pasar parámetros al generador de código 
