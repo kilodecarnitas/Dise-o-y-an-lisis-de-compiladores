@@ -8,18 +8,21 @@ from antlr.CoolParser import CoolParser
 from structure import *
 from tree import TreePrinter
 from myexceptions import *
+from etapa1Listener import Listener
+from klassListener import KlassListener
 from typecheck import Typecheck
+from methodListener import  MethodListener
 
 def parseAndCompare(caseName):
     parser = CoolParser(CommonTokenStream(CoolLexer(FileStream("./resources/semantic/input/%s.cool" % caseName))))
     tree = parser.program()
     walker = ParseTreeWalker()
 
-    walker.walk(HierarchyException(), tree)
-    walker.walk(HierarchyException(), tree)
+    walker.walk(KlassListener(), tree)
     walker.walk(Typecheck(), tree)
+    walker.walk(Listener(), tree)
 
-    treePrinter = TreePrinter(type)
+"""     treePrinter = TreePrinter(type)
     walker.walk(treePrinter, tree)
     output = treePrinter.getOutput()
 
@@ -29,7 +32,7 @@ def parseAndCompare(caseName):
             if line1[:-1] != line2:
                 print ("Diferencia!!! [%s]-[%s]" % (line1, line2))
                 return False
-    return True
+    return True """
 
 class BaseTest(unittest.TestCase):
     def setUp(self): 

@@ -5,12 +5,6 @@ from myexceptions import *
 
 class Declarations(CoolListener):
   idTable = {}
-  inClass = False
-  hasMain = False
-  inMain = False
-  primitiveNames = {'Int', 'String', 'Bool', 'Object', 'SELF_TYPE'}
-  classname = ""
-  letTable = {'self'}
-
-  def enterProgram(self, ctx:CoolParser.ProgramContext):
-    print(ctx.typesTable)
+  
+  def exitAtribute(self, ctx: CoolParser.AtributeContext):
+        self.idtable[ctx.ID().getText()] = ctx.TYPE().getText()
