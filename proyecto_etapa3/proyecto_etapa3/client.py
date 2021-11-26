@@ -8,7 +8,7 @@ from antlr.CoolParser import CoolParser
 
 from declare import Declarations
 from typecheck import Typecheck
-from letListener import LetListener
+from letListener import Listener
 
 
 def main(file):
@@ -16,7 +16,7 @@ def main(file):
   tree = parser.program()
 
   walker = ParseTreeWalker()
-  letchecker = LetListener()
+  letchecker = Listener()
   walker.walk(letchecker, tree)
   
 if __name__ == '__main__':
