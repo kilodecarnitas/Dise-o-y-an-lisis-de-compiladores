@@ -7,6 +7,10 @@ import sys
 from string import Template
 import asm
 
+import math
+
+from listener import Listener1
+
 class Output:
     def __init__(self):
         self.accum = ''
@@ -154,7 +158,7 @@ if __name__ == '__main__':
 
     # Poner aquí los listeners necesarios para recorrer el árbol y obtener los datos
     # que requiere el generador de código
-    #walker.walk(Listener1(), tree)
+    walker.walk(Listener1(), tree)
     #walker.walk(Listener2(), tree)
 
     # Pasar parámetros al generador de código 
