@@ -1,4 +1,4 @@
-# Generated from c:\Users\warpi\Documents\ITESM\8th\Compiladores\proyecto_etapa3\proyecto_etapa3\antlr\Cool.g4 by ANTLR 4.9.2
+# Generated from c:\Users\aorti\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\Neunte teil\Diseño de compiladores\DC - Prácticas\proyecto_etapa3\proyecto_etapa3\antlr\Cool.g4 by ANTLR 4.9.2
 from antlr4 import *
 from io import StringIO
 import sys
