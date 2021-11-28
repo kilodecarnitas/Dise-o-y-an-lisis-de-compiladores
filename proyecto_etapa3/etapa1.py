@@ -12,7 +12,7 @@ from etapa1Listener import Listener
 
 def parseCase(caseName):
   parser = CoolParser(CommonTokenStream(
-      CoolLexer(FileStream("./resources/semantic/input/%s.cool" % caseName))))
+      CoolLexer(FileStream("../resources/semantic/input/%s.cool" % caseName))))
   return parser.program()
 
 

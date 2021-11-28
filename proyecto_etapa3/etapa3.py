@@ -14,7 +14,7 @@ from typecheck import Typecheck
 from methodListener import  MethodListener
 
 def parseAndCompare(caseName):
-    parser = CoolParser(CommonTokenStream(CoolLexer(FileStream("./resources/semantic/input/%s.cool" % caseName))))
+    parser = CoolParser(CommonTokenStream(CoolLexer(FileStream("../resources/semantic/input/%s.cool" % caseName))))
     tree = parser.program()
     walker = ParseTreeWalker()
 

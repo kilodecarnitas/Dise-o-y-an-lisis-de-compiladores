@@ -20,4 +20,4 @@ def main(file):
   walker.walk(letchecker, tree)
   
 if __name__ == '__main__':
-    main("./resources/semantic/input/letself.cool")
+    main("../resources/semantic/input/letself.cool")

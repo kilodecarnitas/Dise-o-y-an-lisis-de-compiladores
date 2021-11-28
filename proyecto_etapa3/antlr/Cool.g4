@@ -1,5 +1,4 @@
-grammar Cool;           
-
+grammar Cool;
 program
     :   ( klass ';' ) *
     ;

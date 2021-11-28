@@ -4,6 +4,9 @@ import unittest
 
 _allClasses = {}
 
+_allStrings = ['--filename--', '\\n']
+_allInts = [0]
+
 class HierarchyException(Exception):
     pass
 

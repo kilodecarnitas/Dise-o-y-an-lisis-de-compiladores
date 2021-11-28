@@ -1,4 +1,4 @@
-# Generated from c:\Users\aorti\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\Neunte teil\Diseño de compiladores\DC - Prácticas\proyecto_etapa3\proyecto_etapa3\antlr\Cool.g4 by ANTLR 4.9.2
+# Generated from c:\Users\aorti\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\Neunte teil\Diseï¿½o de compiladores\DC - Prï¿½cticas\proyecto_etapa3\proyecto_etapa3\antlr\Cool.g4 by ANTLR 4.9.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -6,7 +6,7 @@ import sys
 if sys.version_info[1] > 5:
 	from typing import TextIO
 else:
-	from typing.io import TextIO
+	from typing import TextIO
 
 
 def serializedATN():

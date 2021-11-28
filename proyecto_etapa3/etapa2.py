@@ -8,7 +8,8 @@ from antlr.CoolParser import CoolParser
 from antlr.CoolListener import CoolListener
 from myexceptions import *
 
-import typecheck
+# import typecheck
+from typecheck import Typecheck
 import klassListener
 import methodListener
 import attributeListener
@@ -17,7 +18,7 @@ class Listener(CoolListener):
     c = []
 
 def parseCase(caseName):
-    parser = CoolParser(CommonTokenStream(CoolLexer(FileStream("./resources/semantic/input/%s.cool" % caseName))))
+    parser = CoolParser(CommonTokenStream(CoolLexer(FileStream("../resources/semantic/input/%s.cool" % caseName))))
     return parser.program()
 
 class CoolTests(unittest.TestCase):
