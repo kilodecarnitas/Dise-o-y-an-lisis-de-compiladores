@@ -7,12 +7,12 @@ import sys
 import math
 from string import Template
 import asm
-from data import DataListener
+from finallistener import FinalListener
 from structure import _allStrings, _allInts, _allClasses
 from structure import *
 
 
-basicTags = dict(intTag=2, boolTag=3, stringTag=4)
+typeTag = dict(intTag=2, boolTag=3, stringTag=4)
 
 class Output:
     def __init__(self):
@@ -80,14 +80,14 @@ def constants(o):
         else:
             index = _allInts.index(strLen)
 
-        o.accum += asm.cTplStr.substitute(idx=i, tag=basicTags['stringTag'], size=size, sizeIdx=index, value=_allStrings[i])
+        o.accum += asm.cTplStr.substitute(idx=i, tag=typeTag['stringTag'], size=size, sizeIdx=index, value=_allStrings[i])
 
-    # Integers
+    # Literales Integers
     for i in range(len(_allInts)-1, -1, -1,):
-        o.accum += asm.cTplInt.substitute(idx=i, tag=basicTags['intTag'], value=_allInts[i])
+        o.accum += asm.cTplInt.substitute(idx=i, tag=typeTag['intTag'], value=_allInts[i])
 
-    # Booleans
-    o.accum += asm.boolStr.substitute(tag=basicTags['boolTag'])
+    # Literales Booleans
+    o.accum += asm.boolStr
 
 def tables(o):
     """
@@ -205,7 +205,7 @@ if __name__ == '__main__':
     # Poner aquí los listeners necesarios para recorrer el árbol y obtener los datos
     # que requiere el generador de código
     setBaseClasses()
-    walker.walk(DataListener(), tree)
+    walker.walk(FinalListener(), tree)
     # for klass in _allClasses:
         # print(_allClasses[klass].name, _allClasses[klass].inherits)
     

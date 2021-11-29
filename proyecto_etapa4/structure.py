@@ -2,10 +2,9 @@ from collections import MutableMapping, OrderedDict
 import unittest
 
 
-_allClasses = {}
-
-_allStrings = ['--filename--', '\\n']
 _allInts = [0]
+_allClasses = {}
+_allStrings = ['--filename--', '\\n']
 
 class HierarchyException(Exception):
     pass
