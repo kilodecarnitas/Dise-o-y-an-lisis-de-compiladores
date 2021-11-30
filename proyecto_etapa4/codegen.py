@@ -67,13 +67,13 @@ def constants(o):
             - valor
     """
     for i in range(len(_allStrings)-1, -1, -1,):
-        # Obtener tamaño del string
+        # Sting size
         strLen = len(_allStrings[i].replace("\\",""))
 
-        # Obtener el tamaño del objeto 
+        # Object size
         size = int(4+math.ceil((strLen+1)/4))
         
-        # Guardar el tamaño del string dentro de las constantes Integer si no existe 
+        # Save string length in all ints / update index
         if not strLen in _allInts:
             _allInts.append(strLen)
             index = len(_allInts)-1
@@ -82,11 +82,11 @@ def constants(o):
 
         o.accum += asm.cTplStr.substitute(idx=i, tag=typeTag['stringTag'], size=size, sizeIdx=index, value=_allStrings[i])
 
-    # Literales Integers
+    # Int literals
     for i in range(len(_allInts)-1, -1, -1,):
         o.accum += asm.cTplInt.substitute(idx=i, tag=typeTag['intTag'], value=_allInts[i])
 
-    # Literales Booleans
+    # Bool literals
     o.accum += asm.boolStr
 
 def tables(o):
@@ -101,46 +101,43 @@ def tables(o):
 """
     classStart = _allStrings.index('Object') # TODO: Check if Object is always the first object
 
-    # Class Name Table
     o.p('class_nameTab')
     for i in range(classStart, len(_allStrings)-1):
         o.p('.word', 'str_const{}'.format(i))
 
-    # Class Object Table
     o.p('class_objTab')
     for klass in _allClasses:
         o.p('.word', '{}_protObj'.format(klass))
         o.p('.word', '{}_init'.format(klass)) 
 
-    # Object Dispatch Table
     for klass in _allClasses.values():
         o.p('{}_dispTab'.format(klass.name))
 
-        curr = klass.name
         methods = []
-        currMethods = []
+        actualMethods  = []
+        actualKlass = klass.name
 
-        # Obtener todos los metodos de esta clase
+        # Get klass methods
         for method in klass.methods:
-            currMethods = ["{}.{}".format(curr, method)] + currMethods
-        methods.extend(currMethods)
+            actualMethods  = ["{}.{}".format(actualKlass, method)] + actualMethods 
+        methods.extend(actualMethods )
         
-        # Obtener todos los metodos de las clases que hereda
-        while curr != "Object":
-            curr = _allClasses[curr].inherits
-            currMethods = []
-            for method in _allClasses[curr].methods:
-                currMethods = ["{}.{}".format(curr, method)] + currMethods
-            methods.extend(currMethods)
+        # Get inherited klass methods
+        while actualKlass != "Object":
+            actualKlass = _allClasses[actualKlass].inherits
+            actualMethods  = []
+            for method in _allClasses[actualKlass].methods:
+                actualMethods  = ["{}.{}".format(actualKlass, method)] + actualMethods 
+            methods.extend(actualMethods )
         
-        # Agregar métodos
+        # Add methods
         for i in range(len(methods)-1, -1, -1):
             o.p('.word', methods[i])
     
 def templates(o):
     """
     El template o prototipo para cada objeto (es decir, de donde new copia al instanciar)
-    1. Para cada clase generar un objeto, poner atención a:
+    1. Para cada clase generar un objeto, poner atención a: 
         - nombre
         - tag
         - tamanio [tag, tamanio, dispTab, atributos ... ] = ?
@@ -164,7 +161,7 @@ def templates(o):
         if size>3:
             # TODO: Check how these values are generated
             for attrType in klass.attributes.values():
-                if attrType == "String":
+                if attrType == "String":    
                     o.p(".word", "str_const{}".format(len(_allStrings)-1))
                 elif attrType == "Int":
                     o.p(".word", "int_const0")

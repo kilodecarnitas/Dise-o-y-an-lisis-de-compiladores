@@ -22,7 +22,7 @@ def parseAndCompare(caseName):
     walker.walk(Typecheck(), tree)
     walker.walk(Listener(), tree)
 
-"""     treePrinter = TreePrinter(type)
+    treePrinter = TreePrinter(type)
     walker.walk(treePrinter, tree)
     output = treePrinter.getOutput()
 
@@ -32,7 +32,7 @@ def parseAndCompare(caseName):
             if line1[:-1] != line2:
                 print ("Diferencia!!! [%s]-[%s]" % (line1, line2))
                 return False
-    return True """
+    return True 
 
 class BaseTest(unittest.TestCase):
     def setUp(self): 
